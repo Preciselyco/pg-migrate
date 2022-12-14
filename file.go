@@ -2,7 +2,6 @@ package pqmigrate
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,9 +21,9 @@ func (ctx *PQMigrate) fileEnsureDirExist(path string) error {
 }
 
 func (ctx *PQMigrate) fileGetContents(fileName string) (string, error) {
-	fp := filepath.Join(ctx.config.BaseDirectory, fileName)
+	fp := ctx.config.filePath(fileName)
 	ctx.dbgJoin("fileGetContents", "getting:", fp)
-	cb, err := ioutil.ReadFile(fp)
+	cb, err := ctx.config.fileContents(fp)
 	if err != nil {
 		ctx.dbg("fileGetContents", err)
 		return "", err
@@ -46,7 +45,7 @@ func (ctx *PQMigrate) fileWriteContents(fileName string, contents []byte) error 
 	if err := ctx.fileEnsureDirExist(ctx.config.BaseDirectory); err != nil {
 		return err
 	}
-	return ioutil.WriteFile(fp, contents, 0644)
+	return os.WriteFile(fp, contents, 0644)
 }
 
 func (ctx *PQMigrate) fileExec(fileName string) error {
