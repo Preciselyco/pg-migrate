@@ -61,7 +61,7 @@ func (ctx *PQMigrate) dbGetTx() (*pqdbr.Tx, error) {
 }
 
 func (ctx *PQMigrate) dbTokensToURL() string {
-	urlFormat := "postgres://%s:%s@%s:%s"
+	urlFormat := "postgres://%s:%s@%s:%s?sslmode=%s"
 	gtd := func(tokenName, def string) string {
 		token, found := ctx.dbTokens[tokenName]
 		if !found {
@@ -69,7 +69,7 @@ func (ctx *PQMigrate) dbTokensToURL() string {
 		}
 		return token
 	}
-	return fmt.Sprintf(urlFormat, gtd("user", ""), gtd("password", ""), gtd("host", "localhost"), gtd("port", "5432"))
+	return fmt.Sprintf(urlFormat, gtd("user", ""), gtd("password", ""), gtd("host", "localhost"), gtd("port", "5432"), gtd("sslmode", "disable"))
 }
 
 func (ctx *PQMigrate) dbExists(session *pqdbr.Session, datname string) (bool, error) {

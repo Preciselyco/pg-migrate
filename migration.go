@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"regexp"
 	"sort"
 	"strconv"
@@ -165,7 +164,7 @@ func (ctx *PQMigrate) migrationGetSpecific(fileName string) (*migration, error) 
 
 func (ctx *PQMigrate) migrationGetAll() ([]*migration, error) {
 	ctx.dbg("migrationGetAll")
-	files, err := ioutil.ReadDir(ctx.config.BaseDirectory)
+	files, err := ctx.config.readDir()
 	if err != nil {
 		ctx.dbg("migrationGetAll", err)
 		return nil, err
